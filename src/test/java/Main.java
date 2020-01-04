@@ -1,3 +1,4 @@
+import org.junit;
 import hust.mso.gaframework.Individual;
 
 public class IndividualTest {
