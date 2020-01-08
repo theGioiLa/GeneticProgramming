@@ -25,7 +25,6 @@ public class Main {
         }
 
         Parameter.setSizeGene();
-        // System.out.println(Parameter.PARTIAL_SIZE_GENE.size());
 
         MFEA mfea = new MFEA();
         ArrayList<Individual> best = mfea.run();

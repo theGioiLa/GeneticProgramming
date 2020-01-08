@@ -8,7 +8,7 @@ public class Population {
     ArrayList<Individual> pop = new ArrayList<>();
 
     public void init() {
-        for (int i = 0; i < Parameter.SIZE_GENE; i++) {
+        for (int i = 0; i < Parameter.SIZE_POPULATION; i++) {
             Individual ind = new Individual();
             ind.init();
             pop.add(ind);
@@ -18,13 +18,16 @@ public class Population {
     public void selection() {
         Collections.sort(pop);
         ArrayList<Individual> _pop = new ArrayList<>();
-        boolean bk[] = new boolean[Parameter.ID];
+        boolean bk[] = new boolean[Parameter.counterID];
         Arrays.fill(bk, false);
+        System.out.println(Parameter.counterID + " " + pop.size());
         for (int i = 0; i < pop.size(); i++) {
             if (!bk[pop.get(i).id]) {
                 _pop.add(pop.get(i));
                 bk[pop.get(i).id] = true;
             }
+            if (_pop.size() >= Parameter.SIZE_POPULATION)
+                break;
         }
 
         pop = _pop;

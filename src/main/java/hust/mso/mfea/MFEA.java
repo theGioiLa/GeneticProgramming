@@ -26,18 +26,18 @@ public class MFEA {
             System.out.println(ind.saclarFitness + " " + ind.fitness[0] + " " + ind.fitness[1] + " " + ind.skillFactor);
         }
 
-        // for (int i = 0; i < _pop.pop.size(); i++) {
-        // if (_pop.pop.get(i).skillFactor == 0) {
-        // best.add(_pop.pop.get(i));
-        // break;
-        // }
-        // }
-        // for (int i = 0; i < _pop.pop.size(); i++) {
-        // if (_pop.pop.get(i).skillFactor == 1) {
-        // best.add(_pop.pop.get(i));
-        // break;
-        // }
-        // }
+        for (int i = 0; i < _pop.pop.size(); i++) {
+            if (_pop.pop.get(i).skillFactor == 0) {
+                best.add(_pop.pop.get(i));
+                break;
+            }
+        }
+        for (int i = 0; i < _pop.pop.size(); i++) {
+            if (_pop.pop.get(i).skillFactor == 1) {
+                best.add(_pop.pop.get(i));
+                break;
+            }
+        }
 
         return best;
     }

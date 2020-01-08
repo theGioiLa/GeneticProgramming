@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Parameter {
-    public static int CONDITION_STOP = 100;
+    public static int CONDITION_STOP = 500;
     public static ArrayList<Integer> PARTIAL_SIZE_GENE;
     public static int SIZE_GENE;
     public static int SIZE_POPULATION = 100;
@@ -13,7 +13,7 @@ public class Parameter {
     public static Random rand;
     public static int LARGE_NUMBER = 1000000;
     public static int seed = 0;
-    public static int ID = 0;
+    public static int counterID = 0;
     public static ArrayList<double[][]> WEIGHTS;
 
 
