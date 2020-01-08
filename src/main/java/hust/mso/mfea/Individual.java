@@ -1,51 +1,116 @@
 package hust.mso.mfea;
-import java.util.ArrayList;
 
-public class Individual {
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Individual implements Comparable<Individual> {
     int id;
     double fitness[] = new double[2];
-    double saclarFitness =0;
-    int skillFactor =0;
-    ArrayList<Double> genes = new ArrayList<>();
-    ArrayList<Integer> genes_in_task_0 = new ArrayList<Integer>();
-    ArrayList<Integer> genes_in_task_1 = new ArrayList<Integer>();
-    public void Init(){
-        
+    public int rank[] = new int[2];
+    double saclarFitness = 0;
+    int skillFactor = 0;
+    ArrayList<Integer> genes;
+    ArrayList<Integer> genes_in_task_0;
+    ArrayList<Integer> genes_in_task_1;
+
+    public void init() {
+        genes = new ArrayList<>();
+        for (int i = 0; i < Parameter.SIZE_GENE; i++) {
+            genes.add(i);
+        }
+
+        id = Parameter.ID++;
+
+        Collections.shuffle(genes, Parameter.rand);
+        calFitness0();
+        calFitness1();
     }
-    public void CalFitness0(){
+
+    public ArrayList<Integer> getGenes() {
+        ArrayList<Integer> _genes = new ArrayList<>();
+        for (int i = 0; i < Parameter.SIZE_GENE; i++) {
+            _genes.add(this.genes.get(i));
+        }
+        return _genes;
+    }
+
+    public void calFitness0() {
         decode(0);
-        //
-        
-        
-        
-        
-        
-        
-        fitness[0] = 0;
+        _fitness(0);
     }
-    public void CalFitness1(){
+
+    public void calFitness1() {
         decode(1);
-        
-        
-        
-        
-        fitness[1] = 0;
+        _fitness(1);
     }
-    
-    public void decode(int task){
-        if(task ==0){
-            
-        }else if(task==1){
-            
+
+    private void _fitness(int taskID) {
+        ArrayList<Integer> _genes;
+        if (taskID == 0)
+            _genes = this.genes_in_task_0;
+        else
+            _genes = this.genes_in_task_1;
+
+        double[][] weight = Parameter.WEIGHTS.get(taskID);
+        final int _SIZE_GENE = Parameter.PARTIAL_SIZE_GENE.get(taskID);
+
+        this.fitness[taskID] = 0;
+        for (int i = 0; i < _SIZE_GENE - 1; i++) {
+            int cityId = _genes.get(i);
+            int nextCityId = _genes.get(i + 1);
+            this.fitness[taskID] += weight[cityId][nextCityId];
+        }
+
+        int lastCityId = _genes.get(_SIZE_GENE - 1);
+        int startCityId = _genes.get(0);
+        this.fitness[taskID] += weight[lastCityId][startCityId];
+    }
+
+    public void decode(int task) {
+        if (task == 0) {
+            genes_in_task_0 = new ArrayList<Integer>();
+            for (int gene : genes) {
+                if (gene < Parameter.PARTIAL_SIZE_GENE.get(0))
+                    genes_in_task_0.add(gene);
+            }
+        } else if (task == 1) {
+            genes_in_task_1 = new ArrayList<Integer>();
+            for (int gene : genes) {
+                if (gene < Parameter.PARTIAL_SIZE_GENE.get(1))
+                    genes_in_task_1.add(gene);
+            }
         }
     }
-    public void SetFitness0(double b){
-        fitness[0] =b;
+
+    public void setFitness(int taskID, double b) {
+        fitness[taskID] = b;
     }
-    public void SetFitness1(double b){
-        fitness[1] =b;
+
+    @Override
+    public String toString() {
+        ArrayList<Integer> _genes;
+        if (skillFactor == 0) _genes = genes_in_task_0;
+        else _genes = genes_in_task_1;
+
+        String str = "NST: ";
+        for (Integer cityId : _genes) {
+            str += cityId + " ";
+        }
+
+        str += "\nFitness: " + fitness[skillFactor];
+        str += "\nScalar Fitness: " + saclarFitness;
+        str += "\nSkill Factor: " + skillFactor;
+        // str += "\nMAX: " + Collections.max(genes);
+
+        return str;
     }
-    
-    
-    
+
+    @Override
+    public int compareTo(Individual ind) {
+        if (saclarFitness < ind.saclarFitness)
+            return 1;
+        if (saclarFitness > ind.saclarFitness)
+            return -1;
+        return 0;
+    }
 }
